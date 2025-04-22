@@ -5,9 +5,6 @@
 
 declare module "sst" {
   export interface Resource {
-    "frontend": {
-      "type": "sst.aws.Nextjs"
-    }
   }
 }
 /// <reference path="sst-env.d.ts" />
