@@ -2,8 +2,8 @@ import type { Metadata } from 'next';
 import './globals.css';
 
 export const metadata: Metadata = {
-  title: '{{TITLE}}',
-  description: '{{DESCRIPTION}}',
+  title: 'Gateway Endpoints for S3',
+  description: '🔑 Securely Connecting to Managed Services like S3 from within VPCs',
   keywords: ['{{KEYWORDS}}'],
 };
 
