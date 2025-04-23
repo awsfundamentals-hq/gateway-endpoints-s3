@@ -12,12 +12,13 @@
     "next": "15.2.3",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
-    "sst": "3.10.8"
+    "sst": "3.13.17"
   },
   "devDependencies": {
     "@aws-sdk/client-bedrock-agent-runtime": "^3.0.0",
     "@aws-sdk/client-dynamodb": "^3.782.0",
     "@aws-sdk/client-lambda": "^3.782.0",
+    "@aws-sdk/client-s3": "^3.787.0",
     "@eslint/eslintrc": "^3",
     "@tailwindcss/postcss": "^4",
     "@types/aws-lambda": "^8.10.148",

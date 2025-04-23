@@ -5,6 +5,26 @@
 
 declare module "sst" {
   export interface Resource {
+    "awsf-bucket": {
+      "name": string
+      "type": "sst.aws.Bucket"
+    }
+    "awsf-function": {
+      "name": string
+      "type": "sst.aws.Function"
+    }
+    "awsf-public-function": {
+      "name": string
+      "type": "sst.aws.Function"
+      "url": string
+    }
+    "awsf-vpc": {
+      "type": "sst.aws.Vpc"
+    }
+    "frontend": {
+      "type": "sst.aws.Nextjs"
+      "url": string
+    }
   }
 }
 /// <reference path="sst-env.d.ts" />
