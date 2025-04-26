@@ -17,4 +17,4 @@ pnpmi i
 npx sst deploy --stage dev
 ```
 
-> **Important Note**: This project must be deployed to AWS using `npx sst deploy` and cannot be tested with `npx sst dev` in local development mode. The Lambda function requires AWS Gateway Endpoints which are only available in a deployed AWS environment.
+> **Important Note**: This project must be deployed to AWS using `npx sst deploy` and cannot be tested with `npx sst dev` in local development mode. The Lambda function can't be invoked in the local development environment.
