@@ -17,14 +17,7 @@ export default $config({
     };
   },
   async run() {
-    // creating a VPC
-    // this will by default also create private & public subnets
-    // for all 3 AZs in us-east-1
-    const {
-      publicSubnets,
-      privateSubnets,
-      id: vpcId,
-    } = new sst.aws.Vpc('awsf-vpc', {
+    const { privateSubnets, id: vpcId } = new sst.aws.Vpc('awsf-vpc', {
       az: 3,
     });
 
@@ -51,7 +44,7 @@ export default $config({
       policy: [
         {
           effect: 'deny',
-          actions: ['s3:PutObject', 's3:GetObject', 's3:DeleteObject'],
+          actions: ['s3:PutObject', 's3:GetObject', 's3:DeleteObject', 's3:ListBucket'],
           principals: [
             {
               type: 'aws',
@@ -71,30 +64,27 @@ export default $config({
 
     const blockAll = new aws.ec2.SecurityGroup('block_all', {
       name: 'block_all',
-      description: 'Block all inbound and outbound traffic',
+      description: 'Security group for private Lambda function',
       vpcId,
       ingress: [],
-      egress: [],
+      egress: [
+        {
+          fromPort: 443,
+          toPort: 443,
+          protocol: 'tcp',
+          cidrBlocks: ['0.0.0.0/0'],
+        },
+      ],
       tags: {
         Name: 'block_all',
       },
     });
 
-    const allowAll = new aws.ec2.SecurityGroup('allow_all', {
-      name: 'allow_all',
-      description: 'Allow all inbound and outbound traffic',
-      vpcId,
-      ingress: [],
-      egress: [],
-      tags: {
-        Name: 'allow_all',
-      },
-    });
-
-    const privateFunction = new sst.aws.Function('awsf-function', {
+    new sst.aws.Function('awsf-function', {
+      timeout: '5 seconds',
       handler: 'functions/private.handler',
-      timeout: '15 seconds',
       memory: '1024 MB',
+      link: [bucket],
       vpc: {
         privateSubnets,
         securityGroups: [blockAll.id],
@@ -104,21 +94,8 @@ export default $config({
       },
     });
 
-    const publicFunction = new sst.aws.Function('awsf-public-function', {
-      handler: 'functions/public.handler',
-      timeout: '15 seconds',
-      memory: '1024 MB',
-      link: [privateFunction],
-      url: true,
-      environment: {
-        FUNCTION_NAME: privateFunction.name,
-      },
-    });
-
     new sst.aws.Nextjs('frontend', {
-      environment: {
-        API_URL: publicFunction.url,
-      },
+      environment: {},
     });
   },
 });
